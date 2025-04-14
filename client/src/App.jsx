@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import './App.css'; // Import the custom CSS file
-
-import defaultIDCardFront from './assets/New_Bulgarian_ID_card_(front).png';
+import './App.css';
 
 const App = () => {
   const videoRef = useRef(null);
@@ -20,94 +18,102 @@ const App = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const [tempUri, setTempUri] = useState(null);
-
-  // Terms & Conditions and Modal states for Step 5.
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
-
-  // Photo Conditions modal state (for Steps 2–4).
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
-
-  // State to hold validation result per photo (keyed by photo field name).
   const [photoValidation, setPhotoValidation] = useState({});
 
-  // Lock body scroll when either modal is open.
   useEffect(() => {
     if (isTermsModalOpen || isPhotoModalOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
     }
-    return () => { document.body.style.overflow = 'auto'; };
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
   }, [isTermsModalOpen, isPhotoModalOpen]);
 
-  // Activate camera on steps 2-4.
-  useEffect(() => {
-    if (step >= 2 && step <= 4 && navigator.mediaDevices) {
+  const startCamera = () => {
+    if (navigator.mediaDevices) {
       const constraints = {
         video: { facingMode: step === 4 ? 'user' : 'environment' },
         audio: true
       };
-      navigator.mediaDevices.getUserMedia(constraints).then(stream => {
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          videoRef.current.play();
-        }
-      });
+      navigator.mediaDevices.getUserMedia(constraints)
+        .then((stream) => {
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+            videoRef.current.play();
+          }
+        })
+        .catch(err => console.error("Error starting camera:", err));
     }
+  };
+
+  useEffect(() => {
+
+    if (step >= 2 && step <= 4) {
+      startCamera();
+    }
+
+    return () => {
+      if (videoRef.current && videoRef.current.srcObject) {
+        videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
+      }
+    };
   }, [step]);
 
-  // Helper function that uses OpenCV.js to check image quality.
   const checkImageQuality = (imageDataUrl) => {
+
     return new Promise((resolve, reject) => {
+
       const img = new Image();
       img.onload = () => {
-        // Read the image into a cv.Mat
         const mat = cv.imread(img);
-        // Convert to grayscale
         let gray = new cv.Mat();
         cv.cvtColor(mat, gray, cv.COLOR_RGBA2GRAY);
-        // Compute the Laplacian
         let laplacian = new cv.Mat();
         cv.Laplacian(gray, laplacian, cv.CV_64F);
-        // Compute standard deviation (and then variance)
         let mean = new cv.Mat(), stddev = new cv.Mat();
         cv.meanStdDev(laplacian, mean, stddev);
         const variance = stddev.data64F[0] * stddev.data64F[0];
-        // Clean up Mats
         mat.delete(); gray.delete(); laplacian.delete(); mean.delete(); stddev.delete();
         resolve(variance);
       };
+      
       img.onerror = (err) => reject(err);
       img.src = imageDataUrl;
     });
   };
 
-  // Validate photo using a simple OpenCV.js quality check.
-  // (Currently, photoType is not used, but kept for potential future logic.)
   const validatePhoto = async (imageData, photoType) => {
+
     try {
       const variance = await checkImageQuality(imageData);
-      const THRESHOLD = 100; // Experimentally determined threshold; adjust as needed.
+      const THRESHOLD = 100; 
       if (variance < THRESHOLD) {
         return { valid: false, errors: ["Image appears too blurry. Please retake the photo."] };
       } else {
         return { valid: true, errors: [] };
       }
+
     } catch (error) {
       return { valid: false, errors: ["Error processing image quality. Please try again."] };
     }
   };
 
-  // Validate the image for steps 2-4. For Step 2, if no captured image exists, use defaultIDCardFront.
   useEffect(() => {
+
     if (step >= 2 && step <= 4) {
       const photoKey = step === 2 ? 'idFrontUri' : step === 3 ? 'idBackUri' : 'selfieUri';
       const photoType = step === 4 ? "selfie" : "id";
       let image = tempUri || formData[photoKey];
+
       if (step === 2 && !image) {
         image = defaultIDCardFront;
       }
+
       if (image && !photoValidation[photoKey]) {
         validatePhoto(image, photoType).then(result => {
           setPhotoValidation(prev => ({ ...prev, [photoKey]: result }));
@@ -121,7 +127,7 @@ const App = () => {
     context.drawImage(videoRef.current, 0, 0, 300, 300);
     const imageData = canvasRef.current.toDataURL('image/png');
     setTempUri(imageData);
-    // Invalidate prior validation for the current photo slot.
+
     if (step === 2) setPhotoValidation(prev => ({ ...prev, idFrontUri: undefined }));
     if (step === 3) setPhotoValidation(prev => ({ ...prev, idBackUri: undefined }));
     if (step === 4) setPhotoValidation(prev => ({ ...prev, selfieUri: undefined }));
@@ -135,6 +141,7 @@ const App = () => {
   };
 
   const handleBack = () => {
+
     if (step > 1 && !isTermsModalOpen) {
       setDirection(-1);
       setStep(prev => prev - 1);
@@ -143,12 +150,22 @@ const App = () => {
   };
 
   const slideVariants = {
-    enter: (direction) => ({ x: direction > 0 ? 300 : -300, opacity: 0, position: 'absolute', width: '100%' }),
+
+    enter: (direction) => ({
+      x: direction > 0 ? 300 : -300,
+      opacity: 0,
+      position: 'absolute',
+      width: '100%'
+    }),
     center: { x: 0, opacity: 1, position: 'relative', width: '100%' },
-    exit: (direction) => ({ x: direction > 0 ? -300 : 300, opacity: 0, position: 'absolute', width: '100%' })
+    exit: (direction) => ({
+      x: direction > 0 ? -300 : 300,
+      opacity: 0,
+      position: 'absolute',
+      width: '100%'
+    })
   };
 
-  // Render camera view for photo capture.
   const renderCamera = (shape) => (
     <div className="camera-container">
       <p className="camera-description">Ensure your photo meets these requirements:</p>
@@ -173,8 +190,6 @@ const App = () => {
     </div>
   );
 
-  // Reusable preview component with retake/confirm options.
-  // Under "Are all conditions fulfilled?" we display a message if conditions are not met.
   const renderPreviewWithRetake = (imageSrc, validationResult, onRetake, onConfirm) => (
     <div className="preview-container">
       <img src={imageSrc} alt="preview" className="image-preview" />
@@ -189,14 +204,27 @@ const App = () => {
         </>
       )}
       <div className="preview-buttons">
-        <button onClick={onRetake} className="button">Retake</button>
+        <button onClick={() => {
+          if (tempUri) {
+            setTempUri(null);
+          } else {
+            const photoKey = step === 2 ? 'idFrontUri' : step === 3 ? 'idBackUri' : 'selfieUri';
+            setFormData(prev => ({ ...prev, [photoKey]: '' }));
+          }
+          setPhotoValidation(prev => {
+            const photoKey = step === 2 ? 'idFrontUri' : step === 3 ? 'idBackUri' : 'selfieUri';
+            return { ...prev, [photoKey]: undefined };
+          });
+          startCamera();
+        }} className="button">
+          Retake
+        </button>
         <button onClick={onConfirm} className="button">
           Next
         </button>
       </div>
     </div>
   );
-  
 
   const handleSubmit = () => {
     console.log('Final submitted data:', formData);
@@ -211,7 +239,6 @@ const App = () => {
     5: 'Step 5/5: Confirm and Submit'
   };
 
-  // Render content based on current step.
   const renderStep = () => {
     switch (step) {
       case 1:
@@ -384,7 +411,6 @@ const App = () => {
         </div>
       </div>
 
-      {/* Terms of Conditions Modal */}
       {isTermsModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
@@ -425,7 +451,6 @@ const App = () => {
         </div>
       )}
 
-      {/* Photo Conditions Modal */}
       {isPhotoModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
