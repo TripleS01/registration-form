@@ -190,12 +190,13 @@ const App = () => {
       )}
       <div className="preview-buttons">
         <button onClick={onRetake} className="button">Retake</button>
-        <button onClick={onConfirm} className="button" disabled={!validationResult || !validationResult.valid}>
+        <button onClick={onConfirm} className="button">
           Next
         </button>
       </div>
     </div>
   );
+  
 
   const handleSubmit = () => {
     console.log('Final submitted data:', formData);
