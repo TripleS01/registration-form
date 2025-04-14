@@ -1,0 +1,357 @@
+/* Outer container */
+.outer-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  background-color: #25272B;
+  padding: 2.5rem 0;
+}
+
+/* Form container */
+.form-container {
+  background-color: #1F3B63;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 28rem;
+  position: relative;
+  overflow: hidden;
+  min-height: 500px;
+}
+
+/* Header container */
+.header-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding-bottom: 1.25rem;
+}
+
+/* Step header */
+.step-header {
+  text-align: center;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+/* Title */
+.title {
+  color: white;
+  font-size: 1.875rem;
+  font-weight: bold;
+}
+
+/* Step title container and title */
+.step-title-container {
+  text-align: center;
+  width: 100%;
+  flex: 1;
+}
+
+.step-title {
+  color: white;
+  font-size: 1.125rem;
+  margin: 0;
+  padding: 0.5rem 2rem;
+}
+
+/* Back button */
+.back-button {
+  position: absolute;
+  left: 0;
+  color: white;
+  font-size: 1.5rem;
+  border: none;
+  background: transparent;
+  z-index: 10;
+  cursor: pointer;
+}
+
+/* Centered button containers */
+.centered-button-container,
+.submit-container {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* Common button styles */
+.button {
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: black;
+  background-color: #F97316; /* orange-400 */
+  border: none;
+  border-radius: 1rem;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+.button:hover {
+  background-color: #EA580C; /* orange-500 */
+}
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Input fields */
+.input-field {
+  width: 95%;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #D1D5DB;
+  font-size: 1rem;
+}
+
+/* Relative container for inputs with toggle button */
+.input-relative {
+  position: relative;
+}
+
+/* Toggle button for password fields */
+.toggle-button {
+  position: absolute;
+  right: 0.75rem;
+  top: 0.625rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+/* Sign in text */
+.signin-text {
+  color: white;
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+}
+
+/* Sign in link */
+.signin-link {
+  color: #F97316;
+  text-decoration: underline;
+}
+
+/* Camera container */
+.camera-container {
+  text-align: center;
+  min-height: 430px;
+}
+
+/* Camera description */
+.camera-description {
+  color: white;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Camera requirements */
+.camera-requirements {
+  color: white;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  list-style: none;
+  padding: 0;
+}
+.camera-requirements li {
+  margin-bottom: 0.25rem;
+}
+
+/* Camera preview */
+.camera-preview {
+  margin-left: auto;
+  margin-right: auto;
+  border: 2px dashed #D1D5DB;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  background-image: radial-gradient(ellipse at center, transparent 60%, rgba(128,128,128,0.2) 100%);
+  background-blend-mode: darken;
+}
+.camera-preview.rectangle {
+  width: 300px;
+  height: 200px;
+  border-radius: 0.5rem;
+}
+.camera-preview.ellipse {
+  width: 200px;
+  height: 300px;
+  border-radius: 50% / 60%;
+}
+
+/* Video stream */
+.video-stream {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+/* Photo button extra spacing */
+.photo-button {
+  margin-top: 1.25rem;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+/* Utility: hidden */
+.hidden {
+  display: none !important;
+}
+
+/* Preview container */
+.preview-container {
+  text-align: center;
+  min-height: 430px;
+}
+
+/* Image preview */
+.image-preview {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 90%;
+  max-height: 300px;
+  border-radius: 0.5rem;
+  border: 4px solid #9CA3AF;
+}
+
+/* Error message */
+.error-message {
+  color: #EF4444;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+/* Preview buttons */
+.preview-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+/* Conditions link button */
+.conditions-link {
+  margin-bottom: 1rem;
+  text-decoration: underline;
+  font-size: 0.875rem;
+  color: #F97316;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Final step styling */
+.final-step {
+  color: white;
+}
+.success-message {
+  margin-bottom: 1rem;
+  color: #10B981;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Terms container */
+.terms-container {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.terms-text {
+  color: #F97316;
+  cursor: pointer;
+}
+
+/* Checkbox (default browser appearance) */
+.checkbox {
+  /* additional styling if desired */
+}
+
+/* Modal overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Modal content */
+.modal-content {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  width: 20rem;
+}
+
+/* Modal header */
+.modal-header {
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Modal list */
+.modal-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.modal-list-item {
+  color: #4A5568;
+  margin-bottom: 0.5rem;
+}
+
+/* Modal button container */
+.modal-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+/* Mobile styling */
+@media (max-width: 640px) {
+  .form-container {
+    width: 90%;
+    padding: 1rem;
+  }
+  .input-field {
+    width: 95%;
+    font-size: 0.9rem;
+    padding: 0.4rem;
+  }
+  .title {
+    font-size: 1.5rem;
+  }
+  .step-title {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
+  .modal-content {
+    width: 90%;
+    padding: 1rem;
+  }
+  .camera-preview.rectangle {
+    width: 90%;
+    height: auto;
+    max-width: 300px;
+    max-height: 200px;
+  }
+}
+
+.not-met-text{
+  color: red;
+}
